@@ -1,9 +1,9 @@
 /*
-* @Author: dmyang
-* @Date:   2015-08-02 14:16:41
-* @Last Modified by:   chemdemo
-* @Last Modified time: 2016-04-01 20:48:56
-*/
+ * @Author: dmyang
+ * @Date:   2015-08-02 14:16:41
+ * @Last Modified by:   chemdemo
+ * @Last Modified time: 2016-04-01 20:48:56
+ */
 
 'use strict';
 
@@ -39,7 +39,7 @@ let entries = (() => {
     })
 
     return map
-}())
+})()
 let chunks = Object.keys(entries)
 
 module.exports = (options) => {
@@ -55,7 +55,7 @@ module.exports = (options) => {
     // generate entry html files
     // 自动生成入口文件，入口js名必须和入口文件名相同
     // 例如，a页的入口文件是a.html，那么在js目录下必须有一个a.js作为入口文件
-    let plugins = () => {
+    let plugins = (() => {
         let entryHtml = glob.sync(srcDir + '/*.html')
         let r = []
 
@@ -66,18 +66,18 @@ module.exports = (options) => {
                 filename: filename + '.html'
             }
 
-            if(filename in entries) {
+            if (filename in entries) {
                 conf.inject = 'body'
                 conf.chunks = ['vender', 'common', filename]
             }
 
-            if(/b|c/.test(filename)) conf.chunks.splice(2, 0, 'common-b-c')
+            if (/b|c/.test(filename)) conf.chunks.splice(2, 0, 'common-b-c')
 
             r.push(new HtmlWebpackPlugin(conf))
         })
 
         return r
-    }()
+    })();
 
     plugins.push(
         new webpack.ProvidePlugin({
@@ -88,7 +88,7 @@ module.exports = (options) => {
         })
     )
 
-    if(debug) {
+    if (debug) {
         extractCSS = new ExtractTextPlugin('css/[name].css?[contenthash]')
         cssLoader = extractCSS.extract(['css'])
         sassLoader = extractCSS.extract(['css', 'sass'])
@@ -201,15 +201,15 @@ module.exports = (options) => {
         // @see https://github.com/glenjamin/webpack-hot-middleware
         ((entry) => {
             for (let key of Object.keys(entry)) {
-                if (! Array.isArray(entry[key])) {
+                if (!Array.isArray(entry[key])) {
                     entry[key] = Array.of(entry[key])
                 }
                 entry[key].push('webpack-hot-middleware/client?reload=true')
             }
         })(config.entry)
 
-        config.plugins.push( new webpack.HotModuleReplacementPlugin() )
-        config.plugins.push( new webpack.NoErrorsPlugin() )
+        config.plugins.push(new webpack.HotModuleReplacementPlugin())
+        config.plugins.push(new webpack.NoErrorsPlugin())
     }
 
     return config
