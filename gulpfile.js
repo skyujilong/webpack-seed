@@ -13,7 +13,7 @@ let webpack = require('webpack')
 let gutil = require('gulp-util')
 
 let webpackConf = require('./webpack.config')
-// let webpackDevConf = require('./webpack-dev.config')
+ let webpackDevConf = require('./webpack-dev.config')
 
 let src = process.cwd() + '/src'
 let assets = process.cwd() + '/assets'
@@ -46,6 +46,13 @@ gulp.task('pack', ['clean'], (done) => {
         done()
     })
 })
+gulp.task('dev-pack',['clean'],(done)=>{
+    webpack(webpackDevConf, (err, stats) => {
+        if(err) throw new gutil.PluginError('webpack', err)
+        gutil.log('[webpack]', stats.toString({colors: true}))
+        done()
+    })
+});
 
 // html process
 gulp.task('default', ['pack'])
